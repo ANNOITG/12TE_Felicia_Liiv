@@ -11,8 +11,15 @@ namespace ConsoleApplication30
         static void Main(string[] args)
         {
             List<Character> characters = new List<Character>(); //Listan med olika karaktärer.
-            characters.Add(new Character() { gender = "kvinna", name = "Felicia", hometown = "Örebro", age = 17, birthday = "8 juli", email = "feliciaftw@live.se" }); //Lägger till 2 personer för att slippa göra det under tiden jag arbetar.
-            characters.Add(new Character() { gender = "kvinna", name = "Karin", hometown = "Örebro", age = 32, birthday = "29 juli", email = "karin@lol.se" }); 
+            characters.Add(new Character() { gender = "kvinna", name = "Felicia", hometown = "Örebro", age = 17, birthday = "8 juli", email = "feliciaftw@live.com" }); //Lägger till 3 personer för att slippa göra det under tiden jag arbetar.
+            characters.Add(new Character() { gender = "kvinna", name = "Karin", hometown = "Örebro", age = 32, birthday = "29 juli", email = "karin@rofl.net" }); 
+            characters.Add(new Character() { gender = "kvinna", name = "Lisa", hometown = "Örebro", age = 32, birthday = "19 juni", email = "lisa@lol.se" });
+
+            //Console.WriteLine("Vilken email vill du ta fram?");
+            //string email = Console.ReadLine();
+            //Character character = characters.Single(p => p.email == email);
+
+
 
             while (true) //Loop så att när du skrivit in dig i listan eller öppnat de olika listorna så börjar du om.
             {
@@ -51,7 +58,7 @@ namespace ConsoleApplication30
                         break;
 
                     case "b":
-
+                        Console.WriteLine(Character.counter);
                         foreach (Character p in characters) //För varje person som skrivit in sig så skrivs den ut.
                         {
                             Console.WriteLine(p + "\n");
@@ -61,35 +68,35 @@ namespace ConsoleApplication30
 
                     case "c":
                         Console.WriteLine("Ändra en post via index");
-                        int changeindex = 0;
+
                         foreach (Character p in characters) //För att användaren ska se vilken profil som har vilket index så 
                         {                                   //skrivs alla profiler ut.
-                            Console.WriteLine(changeindex + ":\n" + p + "\n");
-                            changeindex++;
+                            Console.WriteLine(p + "\n");
                         }
 
                         try
                         {
-                            Console.WriteLine("Vilket index vill du ändra?"); //Detta nedanför är för att du ska kunna ändra i profilen.
-                            int andIndex = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Vilken email vill du ta fram?"); //Igenom att söka på e-mail så kan du ändra
+                            string andraEmail = Console.ReadLine();             //i en profil.
+                            Character andraCharacter = characters.Single(p => p.email == andraEmail);
 
                             Console.WriteLine("Kön?");
-                            characters[andIndex].gender = Console.ReadLine();
+                            andraCharacter.gender = Console.ReadLine();
 
                             Console.WriteLine("Namn?");
-                            characters[andIndex].name = Console.ReadLine();
+                            andraCharacter.name = Console.ReadLine();
 
                             Console.WriteLine("Vart bor du?");
-                            characters[andIndex].hometown = Console.ReadLine();
+                            andraCharacter.hometown = Console.ReadLine();
 
                             Console.WriteLine("Ålder?");
-                            characters[andIndex].age = int.Parse(Console.ReadLine());
+                            andraCharacter.age = int.Parse(Console.ReadLine());
 
                             Console.WriteLine("När fyller du?");
-                            characters[andIndex].birthday = Console.ReadLine();
+                            andraCharacter.birthday = Console.ReadLine();
 
                             Console.WriteLine("Vad är din e-mail?");
-                            characters[andIndex].email = Console.ReadLine();
+                            andraCharacter.email = Console.ReadLine();
 
                         }
                         catch (Exception e) //Om du skriver någonting fel så kommer det komma upp ett felmeddelande.
@@ -101,20 +108,20 @@ namespace ConsoleApplication30
                     case "d":
                         Console.WriteLine("Ta bort en post via index"); //Samma här, vi skriver ut alla i listan för att användaren
                                                                         //ska veta vad hen tar upp.
-                        int removeindex = 0;
+
                         foreach (Character p in characters)
                         {
-                            Console.WriteLine(removeindex + ":\n" + p + "\n");
-                            removeindex++;
+                            Console.WriteLine(p + "\n");
                         }
 
                         try
                         {
-                            Console.WriteLine("Vilket index vill du ta bort?");
-                            int remIndex = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Vilken email vill du ta fram?"); //Igenom att söka på e-mail så kan du ta bort
+                            string deleteEmail = Console.ReadLine();             //i en profil.
+                            Character deleteCharacter = characters.Single(p => p.email == deleteEmail);
 
 
-                            characters.Remove(characters[remIndex]); //Ta bort profilen på indexet som användaren skrev in.
+                            characters.Remove(deleteCharacter); //Ta bort profilen på indexet som användaren skrev in.
                             Character.counter--; //Så att räknaren inte skriver fel.
                         }
                         catch (Exception e) //Felmeddelande kommer upp om du skriver något knas.
@@ -125,6 +132,23 @@ namespace ConsoleApplication30
                         break;
 
                     case "e":
+
+                        Console.WriteLine("Skriv in sökord: ");
+                        string sokOrd = Console.ReadLine();
+
+                        var sokRes = from res in characters
+                                     where res.gender.Contains(sokOrd)
+                                        || res.name.Contains(sokOrd)
+                                        || res.hometown.Contains(sokOrd)
+                                        || res.age.ToString().Contains(sokOrd)
+                                        || res.birthday.Contains(sokOrd)
+                                        || res.email.Contains(sokOrd)
+                                     select res;
+
+                        foreach (Character p in sokRes)
+                        {
+                            Console.WriteLine(p);
+                        }
 
                         break;
 

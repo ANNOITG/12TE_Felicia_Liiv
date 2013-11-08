@@ -24,7 +24,7 @@ namespace ConsoleApplication30
 
         public override string ToString() //Här är det som skrivs ut när minst en person skrivit in sig.
         {
-            return "Antal personer som skrivit in sig: " + counter + "\nGender: " + gender + "\nName: " + name + 
+            return "\nGender: " + gender + "\nName: " + name + 
                 "\nHometown: " + hometown + "\nAge: " + age + "\nBirthday: " + birthday + "\nEmail: " + email;
         }
     }
