@@ -159,7 +159,7 @@ namespace ConsoleApplication28
                 Console.WriteLine("Du har nu " + poang + " poäng");
                 if (leftOvers() == false)
                 {
-                    Console.WriteLine("Grattis! Du klarade spelet med " + p);
+                    Console.WriteLine("Grattis! Du klarade spelet med " + poang);
                     break;
                 }
 
