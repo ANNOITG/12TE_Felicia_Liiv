@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="LinqToSqlBb" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\LinqToSqlBb.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="LINQ_Project__mittegna_.Properties.Settings" SettingsPropertyName="LinqToSqlBbConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Author" Member="Authors">
+    <Type Name="Author">
+      <Column Name="Author_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Author_Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Age" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Born_In" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="Genre" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="Startyear" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Association Name="Author_Book" Member="Books" ThisKey="Author_ID" OtherKey="Author" Type="Book" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Book" Member="Books">
+    <Type Name="Book">
+      <Column Name="Book_ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Author" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Book_Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ReleaseYear" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="BookLanguage" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Association Name="Author_Book" Member="Author1" ThisKey="Author" OtherKey="Author_ID" Type="Author" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
