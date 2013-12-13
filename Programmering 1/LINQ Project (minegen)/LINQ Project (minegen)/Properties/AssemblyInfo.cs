@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LINQ Project (mittegna)")]
+[assembly: AssemblyTitle("LINQ Project (minegen)")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LINQ Project (mittegna)")]
+[assembly: AssemblyProduct("LINQ Project (minegen)")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("fba2842f-b767-42bb-bc57-38f5ec925609")]
+[assembly: Guid("f28f0319-7349-430a-90f6-ff8e30ff4a6a")]
 
 // Version information for an assembly consists of the following four values:
 //

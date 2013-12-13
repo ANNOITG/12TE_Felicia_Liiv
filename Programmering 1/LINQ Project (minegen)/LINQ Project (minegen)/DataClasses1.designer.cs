@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LINQ_Project__mittegna_
+namespace LINQ_Project__minegen_
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -23,7 +23,7 @@ namespace LINQ_Project__mittegna_
 	
 	
 	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="LinqToSqlBb")]
-	public partial class LTSDataContext : System.Data.Linq.DataContext
+	public partial class DataClasses1DataContext : System.Data.Linq.DataContext
 	{
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
@@ -38,31 +38,31 @@ namespace LINQ_Project__mittegna_
     partial void DeleteBook(Book instance);
     #endregion
 		
-		public LTSDataContext() : 
-				base(global::LINQ_Project__mittegna_.Properties.Settings.Default.LinqToSqlBbConnectionString, mappingSource)
+		public DataClasses1DataContext() : 
+				base(global::LINQ_Project__minegen_.Properties.Settings.Default.LinqToSqlBbConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public LTSDataContext(string connection) : 
+		public DataClasses1DataContext(string connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public LTSDataContext(System.Data.IDbConnection connection) : 
+		public DataClasses1DataContext(System.Data.IDbConnection connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public LTSDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public DataClasses1DataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public LTSDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public DataClasses1DataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();

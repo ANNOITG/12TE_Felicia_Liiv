@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LINQ_Project__mittegna_.Properties {
+namespace LINQ_Project__minegen_.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
