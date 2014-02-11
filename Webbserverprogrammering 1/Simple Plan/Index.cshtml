@@ -1,1 +1,41 @@
-﻿<div id="SP.logo"><img src="images/sp_logo.gif" alt="b" /></div>
+﻿@{
+    
+    var db = Database.Open("Blogg");
+    var result = db.Query("Select * from Blog order by Date Desc");
+
+    IList<DynamicRecord> leftList = new List<DynamicRecord>();
+    IList<DynamicRecord> rightList = new List<DynamicRecord>();
+
+    var pointer = 0;
+    foreach(var row in result)
+    {
+        if(pointer == 0)
+        {
+            leftList.Add(row);
+            pointer = 1;
+        }
+        else
+        {
+            rightList.Add(row);
+            pointer = 0;
+        }
+    }
+}
+
+<div id="SP_logo"><img src="images/sp_logo.gif" alt="b" /></div>
+<div class="leftCont">
+    @foreach(var lr in leftList)
+    {
+        <div class="rub">@lr[1]</div>
+        <div class="dat">@lr[2]</div>
+        <div class="cont">@lr[3]</div>
+    }
+</div>
+<div class="rightCont">
+    @foreach(var lr in rightList)
+    {
+        <div class="rub">@lr[1]</div>
+        <div class="dat">@lr[2]</div>
+        <div class="cont">@lr[3]</div>
+    }
+</div>
