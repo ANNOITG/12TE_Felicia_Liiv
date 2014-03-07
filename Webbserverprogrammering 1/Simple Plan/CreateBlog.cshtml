@@ -1,0 +1,34 @@
+﻿@{
+    Validation.RequireField("Title", "You must enter a title");
+    Validation.RequireField("Content", "You must enter content.");
+
+    var title = "";
+    var content = "";
+    var date = DateTime.Now;
+
+    if(IsPost && Validation.IsValid()){
+        title = Request.Form["Title"];
+        content = Request.Form["Content"];
+        
+
+        var db= Database.Open("Blogg");
+        var insertCommand = "INSERT INTO Blog (Title, Content, Date) VALUES(@0, @1, @2)";
+        db.Execute(insertCommand, title, content, date);
+        Response.Redirect("~/Index.cshtml");
+    }
+}
+
+
+<h1 class="Add">Add a post</h1>
+<form method="post">
+    @Html.ValidationSummary()
+    <p class="rubrik"><label for="Title" >TITLE</label><br/>
+        <input type="text" name="Title" value="@Request.Form["Title"]" />
+        @Html.ValidationMessage("Title")
+    </p>
+    <p class="rubrik"><label for=Content" >CONTENT</label><br/>
+        <textarea cols="70" rows="20" name="Content" >@Request.Form["Content"]</textarea>
+        @Html.ValidationMessage("Content")
+    </p>
+    <p><input class="button" type="submit" name="buttonSubmit" value="Add Post" /></p>
+</form>
