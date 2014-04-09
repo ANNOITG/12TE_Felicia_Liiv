@@ -1,0 +1,83 @@
+﻿@{
+    WebImage photo = null;
+    var newFileName = "";
+    var imagePath = "";
+    var imageThumbPath = "";
+    var Name = "";
+    var Info = "";
+    var Price = "";
+    var Stock = "";
+    var Category = "";
+    
+    if(IsPost)
+    {
+        Name = Request.Form["Name"];
+        Info = Request.Form["Info"];
+        Price = Request.Form["Price"];
+        Stock = Request.Form["Stock"];
+
+        var db = Database.Open("StarterSite");
+        var insertCommand = "INSERT INTO Products (Name, Image, Thumb, Info, Category, Price, Stock) VALUES(@0, @1, @2, @3, @4, @5, @6, @7)";
+        db.Execute(insertCommand, Name, imagePath, imageThumbPath, Info, Category, Price, Stock);
+        
+        photo = WebImage.GetImageFromRequest(Request.Form["image"]);
+        if (photo != null)
+        {
+            newFileName = Guid.NewGuid().ToString() + "_" +
+                Path.GetFileName(photo.FileName);
+            imagePath = @"Images/" + newFileName;
+            photo.Save(@"~/" + imagePath);
+            <p>@imagePath</p>
+            imageThumbPath = @"Images/thumbs/" + newFileName;
+            photo.Resize(width: 60, height: 60, preserveAspectRatio: true,
+                preventEnlarge: true);
+            photo.Save(@"~/" + imageThumbPath);
+        }
+    }
+}
+
+<h1>Thumbnail Image</h1>
+<form method="post" enctype="multipart/form-data">
+    <fieldset>
+        <legend>Creating Product</legend>
+
+        <p><label for="Name">Product name:</label>
+            <input type="text" name="Name" value="@Request.Form["Name"] />
+        </p>
+
+        <label for="Image">Image</label>
+        <input name="Image" type="file" value="Image" />
+        <br />
+
+        <p><label for="Info">Specification:</label>
+            <textarea name="Info">@Request.Form["Info"]</textarea>
+        </p>
+
+        <p><label for="Category">Category:</label>
+            <select>
+                <option value="Perfume">Perfume</option>
+                <option value="Handbags">Handbags</option>
+                <option value="Jewelry">Jewelry</option>
+                <option value="Diverse">Diverse</option>
+            </select>
+        </p>
+
+        <p><label for="Price">Price:</label>
+            <input name="Price" type="number" value="@Request.Form["Price"]" />
+        </p>
+
+        <p><label for="Stock">Amount left:</label>
+            <input type="number" name="Stock" value="@Request.Form["Stock"] />
+        </p>
+
+        <input type="submit" value="Submit" />
+    </fieldset>
+</form>
+@if (imagePath != "") { 
+    <div class="result">
+        <img src="@imageThumbPath" alt="Thumbnail Image" />
+        <a href="@Html.AttributeEncode(imagePath)" target="_Self">
+            View full size
+        </a>
+    </div>
+}
