@@ -1,0 +1,47 @@
+﻿@{
+    
+    var db = Database.Open("Blogg");
+    var result = db.Query("Select * from Blog order by Date Desc");
+
+    List<DynamicRecord> leftList = new List<DynamicRecord>();
+    List<DynamicRecord> rightList = new List<DynamicRecord>();
+
+    var pointer = 0;
+    foreach(var row in result)
+    {
+        if(pointer == 0)
+        {
+            leftList.Add(row);
+            pointer = 1;
+        }
+        else
+        {
+            rightList.Add(row);
+            pointer = 0;
+        }
+    }
+}
+<div class="leftCont">
+    @foreach(var lr in leftList)
+    {
+        <div class="rub">@lr[1]</div>
+        <div class="dat">@(((DateTime)lr[2]).ToString("dd-MMMM, yyyy H:mm"))</div>
+        <div class="line"></div>
+        <br>
+        <div class="cont">@lr[3]</div>
+        <a href="EditBlog.cshtml?id=@lr[0].ToString()"><button>Edit</button></a>
+        <hr class="line2"/>
+    }
+</div>
+<div class="rightCont">
+    @foreach(var lr in rightList)
+    {
+        <div class="rub">@lr[1]</div>
+        <div class="dat">@(((DateTime)lr[2]).ToString("dd-MMMM, yyyy H:mm"))</div>
+        <div class="line"></div>
+        <br>
+        <div class="cont">@lr[3]</div>
+        <a href="EditBlog.cshtml?id=@lr[0].ToString()"><button>Edit</button></a>
+        <hr class="line2"/>
+    }
+</div>

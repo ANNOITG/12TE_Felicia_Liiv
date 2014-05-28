@@ -1,0 +1,63 @@
+﻿@{
+    var Title="";
+    var Content="";
+    var PostID="";
+
+    if(!IsPost){
+        if(!Request.QueryString["id"].IsEmpty() && Request.QueryString["id"].IsInt()) {
+            PostID = Request.QueryString["id"];
+            var db = Database.Open("Blogg");
+            var dbCommand = "SELECT * FROM Blog WHERE ID = @0";
+            var row = db.QuerySingle(dbCommand, PostID);
+            Title = row.Title;
+            Content = row.Content;
+
+            if(row != null){
+                Title = row.Title;
+                Content = row.Content;
+            }
+            else {
+                Validation.AddFormError("No post was found with that ID!");
+            }
+        }
+        else {
+            Validation.AddFormError("No post was selected.");
+        }
+    }
+    if(IsPost){
+        Validation.RequireField("Title", "You must enter a title!");
+        Validation.RequireField("Content", "You have to enter content.");
+        Validation.RequireField("PostID", "No Post ID was submitted!");
+
+        Title=Request.Form["Title"];
+        Content=Request.Form["Content"];
+        PostID=Request.Form["PostID"];
+        
+        if(Validation.IsValid()){
+            var db= Database.Open("Blogg");
+            var updateCommand = "UPDATE Blog SET TITLE=@0, CONTENT=@1 WHERE ID=@2";
+            db.Execute(updateCommand, Title, Content,PostID);
+            Response.Redirect("~/Index");
+        }
+    }
+
+}
+
+
+<h1 class="Add">Edit a post</h1>
+@Html.ValidationSummary()
+<form method="post">
+    <p><a class="Return" href="~/Index">Return</a></p>
+    <p class="rubrik"><label for="Title">TITLE</label><br/>
+    <input type="text" name="Title" value="@Title"/></p>
+
+    <p class="rubrik"><label for="Content">CONTENT</label><br/>
+    <textarea cols="70" rows="20" name="Content">@Content</textarea></p>
+
+    <input type="hidden" name="postid" value="@PostID" />
+
+    <p><input class="button" type="submit" name="submitButton" value="Save Changes"/></p>
+</form>
+
+<p><a class="button" href="DeleteBlog.cshtml?id=@PostID"><button>Delete</button></a></p>
+<p><a class="Return" href="~/Index">Return</a></p>
