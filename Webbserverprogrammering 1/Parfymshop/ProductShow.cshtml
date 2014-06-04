@@ -1,0 +1,13 @@
+﻿@{
+    var db = Database.Open("StarterSite"); <!-- Hämtar ut IDt ifrån databasen -->
+    var prod = db.QuerySingle(" SELECT * FROM Products WHERE ProductID = " + Request["ID"]);
+    Layout = "~/_SiteLayout.cshtml";
+}
+                <!-- Såhär ska det visas upp -->
+                <div id="showImage"><img src="@Href("~/" + prod.Image)" class="product_image"/></div> 
+                <div id="showName">@prod.Name</div>
+                <div id="showInfo"><i>@prod.Info</i></div>
+                <div id="showPrice">@prod.Price:-</div>
+            <div class="buybutton" id="showBuy">
+                <a href="~/Cart.cshtml?ID=@prod.ProductID"><img src="~/Cart_pic.png" id="buy"/> | Buy</a>
+            </div>

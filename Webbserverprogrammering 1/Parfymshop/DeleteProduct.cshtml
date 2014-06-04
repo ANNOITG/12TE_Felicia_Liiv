@@ -1,0 +1,51 @@
+﻿@{
+    var pid = Request["ID"].AsInt(); <!-- Gör om IDt till int -->
+
+    var delSucImg = false; <!-- Inget är deletat än. -->
+    var delSucThumb = false;
+    var delSucRow = false;
+    
+    try 
+    {
+        var db = Database.Open("StarterSite"); <!-- Hämtar ut från databasen -->
+        var product = db.QuerySingle("Select * from Products where ProductID = " + pid);
+
+        var fullpathThumb = Server.MapPath(product.Thumb); <!-- För att man ska kunna connecta en bild med en kolumn i databasen -->
+        var fullpathImage = Server.MapPath(product.Image);
+
+        db.Execute("Delete from Products where ProductID = " + pid); 
+        delSucRow = true; <!-- Tar bort allt förutom image och thumb och gör om det till true. -->
+
+        if (File.Exists(fullpathImage)) 
+        { <!-- Om det finns en bild -->
+            File.Delete(fullpathImage); <!-- Så tar vi bort den -->
+            delSucImg = true; 
+        }
+        
+        if(File.Exists(fullpathThumb)) 
+        {
+            File.Delete(fullpathThumb);
+            delSucThumb = true;
+        }
+        
+        <p>Sucess deleting product. <a href="@Href("~/AddProduct.cshtml")">Return</a></p>
+    }
+    catch (Exception e) 
+    { <!-- Om det inte fungerar -->
+        if(!delSucRow)
+        { <!-- Visa felmeddelande -->
+            <p>@e.Message</p>
+        }
+        
+        if(!delSucImg)
+        {
+            <p>Image not deleted from server or not found</p>
+        }
+        
+        if(!delSucThumb)
+        {
+            <p>Thumbnail not deleted from server or not found</p>
+        }
+    }
+}
+

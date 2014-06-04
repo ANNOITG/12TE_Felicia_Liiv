@@ -1,0 +1,13 @@
+﻿@{
+    var pid = Request["ID"].AsInt(); <!-- Gör om IDt till int --> 
+
+    var theKey = WebSecurity.CurrentUserId.ToString(); 
+    IList<int> Cart = (List<int>)WebCache.Get(theKey); <!-- Hämtar ut objektet ur listan -->
+    
+    if(Cart != null) 
+    { <!-- Om kundvagnen inte är tom -->
+        Cart.Remove(pid); <!-- Så tas det du trycker bort bort -->
+    }
+    
+    Response.Redirect("~/Cart.cshtml"); <!-- Gå tillbaka till Cart. -->
+}

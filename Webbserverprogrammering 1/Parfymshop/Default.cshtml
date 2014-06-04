@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Home Page";
+    var db = Database.Open("StarterSite");
+    var prod = db.Query(" SELECT * FROM Products ");
+    
+}
+<div class="bxContainer"> <!-- Slidern på default sidan. -->
+<ul class="bxslider">
+  <li><img src="~/Logo.png" /></li>
+  <li><img src="~/Parfymjpg.jpg" /></li>
+  <li><img src="~/Cart_pic.png" /></li>
+  <li><img src="~/Cart_pic.png" /></li>
+</ul>
+    </div>
+
+@foreach (var row in prod) 
+{ <!-- Här redovisas alla produkter i databasen. -->
+    {
+
+        <div class="product_frame">
+            <a href="~/ProductShow.cshtml?ID=@row.ProductID">
+                <div id="image"><img src="@Href("~/" + row.Thumb)"/></div> 
+                <div id="price">@row.Price:-</div>
+            </a>
+            <div class="buybutton">
+                <a onclick="link(@row.ProductID)"  href="#"><img src="~/Cart_pic.png" id="buy"/> | Buy</a>
+            </div>
+        </div>
+
+    }
+}

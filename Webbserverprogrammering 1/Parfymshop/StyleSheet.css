@@ -1,0 +1,408 @@
+﻿body {
+    background-image: url("Parfymjpg.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-size: 800px;
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: Blake;
+    src: url(blake2.ttf);
+    font-family: Titlefont;
+    src: url(basictitlefont.ttf);
+}
+
+.bxContainer {
+    width: 60%;
+    margin-left: 200px;
+    margin-top: 10px;
+}
+
+
+ul {
+    list-style: none;
+}
+
+.loginbuttons { /* Login menyn */
+    position: fixed;
+    background-color: rgb(243, 243, 243);
+    box-shadow: 0 0 2px 0;
+    min-height: 30px;
+    z-index: 3;
+    width: 100%;
+}
+
+.loginbuttons ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 30px;
+    min-width: 15%;
+}
+
+    .loginbuttons ul:first-child {
+        float: right;
+    }
+
+.loginbuttons ul a {
+    text-decoration: none;
+    color: white;
+}
+
+.loginbuttons ul li {
+   margin-top: 2px;
+   display: inline-block;
+   padding: 2.5px 5px;
+   text-decoration: none;
+   background-color: #ff006a;
+   border-radius: 10px;
+   height: 20px;
+   font-size: 15px;
+   width: 40%;
+   text-align: center;
+   max-width: 60px;
+   float: right;
+   margin-left: 2px;
+   }
+
+.loginbuttons ul li:hover {
+    background: #ff006a;
+   }
+
+#errorLog {
+    color: red;
+    font-size: 10px;
+    display: inline;
+    float: left;
+}
+
+.loggedin {
+    position: fixed;
+    background-color: rgb(243, 243, 243);
+    box-shadow: 0 0 2px 0;
+    min-height: 30px;
+    z-index: 3;
+    width: 100%;
+    padding-top: 5px;
+}
+
+    .loggedin * {
+        display: inline;
+        text-decoration: none;
+        color: gray;
+    }
+
+        .loggedin *:hover {
+            color: black;
+        }
+
+        .loggedin *:nth-child(2) {
+            margin-left: 520px;
+        }
+
+#logoutBtn {
+   padding: 2.5px 5px;
+   text-decoration: none;
+   background-color: #ff006a;
+   border-radius: 10px;
+   height: 20px;
+   font-size: 15px;
+   width: 40%;
+   text-align: center;
+   color: white;
+}
+
+#logoutBtn:hover {
+    background: #ff006a;
+}
+
+#body {
+    position: relative;
+    top: 30px;
+}
+
+ .logoPlacer {
+    position: absolute;
+    z-index: 1;
+}
+
+ .main { /*Logo och categories menyn*/
+    position: absolute;
+    display: inline-block;
+    margin-left: 173px;
+    width: 87%;
+    top: 19px;
+}
+
+ .menu { /* Bara categories menyn */
+    margin-top: 65px;
+    margin-left: 130px;
+    padding: 0;
+}
+
+ .menu a {
+    text-decoration: none;
+    color: black;
+}
+
+ .menu > li {
+    display: inline-block;
+    font-family: Blake;
+    font-size: 180%;
+    padding-left: 100px;
+}
+
+
+
+    .menu li ul {
+        list-style: none;
+        position: absolute;
+        display: none;
+        padding: 0;
+        margin: 0;
+        background-color: white;
+        border: 1px solid gray;
+
+    }
+
+    .menu li:hover ul {
+        display: block;
+    }
+
+    .menu li ul li {
+        font-family: Calibri;
+        font-size: 20px;
+        padding: 4px;
+        margin: 0;
+        border-bottom: 1px solid gray;
+        padding-left: 5px;
+        padding-right: 20px;
+        font-family: Titlefont;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .menu li ul li:last-child {
+        border-bottom: none;
+    }
+
+ol li input {
+    z-index: 1;
+}
+
+#cart {
+    width: 20px;
+}
+
+.cartbutton { /* För att komma till cart */
+    background-color: white;
+    padding: 2px;
+    padding-top: 4px;
+    padding-left: 3px;
+    padding-right: 3px;
+    width: 100px;
+    margin-left: 90%;
+    z-index: -5;
+    margin-left: 1100%;
+    margin-top: -20px;
+    
+}
+
+    .cartbutton a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .cartbutton a:hover {
+        color: gray;
+    }
+
+    #buy {
+    width: 20px;
+}
+
+.buybutton img {
+    width: 20px;
+}
+
+.buybutton { /*För att köpa varan så den läggs till i kundkorgen*/
+    margin-left: 37px;
+    margin-top: -20px;
+    border: 1px solid gray;
+    background-color: white;
+    
+}
+
+.buybutton a {
+    text-decoration:none;
+    color: black;
+    background-color: white;
+}
+
+
+.featured {
+    margin-left: 2%;
+    margin-top: 58px;
+    display: inline-block;
+    position: absolute;
+    width: 8%;
+}
+
+.featured_frame {
+    padding: 20px;
+    background-color: rgba(255, 143, 201, 0.40);
+    border: 1px solid gray;
+    margin-bottom: 10px;
+    width: 100px;
+    padding-bottom: 10px;
+}
+
+    #image img {
+        border-bottom: 1px solid gray;
+        border-right: 1px solid gray;
+    }
+
+.featured_manage {
+    text-decoration: none;
+    color: gray;
+    font-size: 15px;
+}
+
+    .featured_manage:hover {
+        color: black;
+    }
+
+
+    .buymenu { /*För kundkorgen i kanten på alla sidor utom default.*/
+    margin-top: 90px;
+    margin-left: -1%;
+    width: 11%;
+    height: 300px;
+
+    background-color: white;
+    border: 1px solid grey;
+    position: fixed;
+}
+
+    .buymenu p {
+        font-size: 14px;
+        text-align: center;
+        margin-top: -2px;
+    }
+
+
+    .cartCont {
+    margin-top: 5px;
+    min-height: 270px;
+    overflow: scroll;
+}
+
+    .cartCont u {
+        font-size: 15px;
+        font-family: Titlefont;
+    }
+
+    .errorMenu {
+    color:red;
+}
+
+    .cartbutton_menu {
+    margin-left: 20px;
+}
+
+.cartbutton_menu a{
+    text-decoration: none;
+    color: black;
+}
+
+.content {
+    position: relative;
+    width: 99%;
+    min-height: 500px;
+    background-color: rgba(255, 143, 201, 0.40);
+    margin-top: -20px;
+    border: 1px solid gray;
+}
+
+
+.product_frame {
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    width: 99px;
+    display: inline-block;
+}
+
+    .product_frame a {
+        color: black;
+        text-decoration: none;
+    }
+
+        .product_frame a:visited {
+            color: black;
+        }
+
+
+    .product_frame:hover {
+        background-color: rgb(255, 143, 201);
+    }
+
+.product_image {
+    width: 300px;
+}
+
+
+#deleteFromCart {
+    text-decoration: none;
+    color: gray;
+    padding: 2px;
+    padding-bottom: -2px;
+}
+
+    #deleteFromCart:hover {
+        background-color: rgb(220, 220, 220);
+    }
+
+#showImage img{
+    margin-top: 5px;
+    margin-left: 10px;
+    border: 1px solid gray;
+}
+
+#showName {
+    margin-left: 350px;
+    margin-top: -300px;
+    font-weight: bold;
+    font-size: 22px;
+    font-family: Titlefont;
+}
+
+#showInfo {
+    margin-left: 350px;
+    font-size: 14px;
+}
+
+#showPrice {
+    margin-left: 700px;
+    margin-top: 200px;
+}
+
+#showBuy {
+    margin-left: 740px;
+    width: 67px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,121 @@
+﻿@{
+    WebImage photo = null; <!-- Variabelnamn för varje kolumn i tabellen i databasen. -->
+    var newFileName = "";
+    var imagePath = "";
+    var imageThumbPath = "";
+    var Name = "";
+    var Info = "";
+    var Price = "";
+    var Stock = "";
+    var Category = "";
+    
+    
+    if(IsPost  && Validation.IsValid()) 
+    { <!-- Om man har "publicerat" produkten och det fungerar som det ska -->
+        Name = Request.Form["Name"]; <!-- Det som står i fältet kommer att sparas i databasen under rätt kolumn -->
+        Info = Request.Form["Info"];
+        Price = Request.Form["Price"];
+        Stock = Request.Form["Stock"];
+        imagePath = Request.Form["Image"];
+        imageThumbPath = Request.Form["Thumb"];
+        Category = Request.Form["Category"];
+        var Date = DateTime.Now; <!-- För att hålla i ordning på vilken som är nyast i "featured items" -->
+
+        
+        
+        photo = WebImage.GetImageFromRequest(Request.Form["Image"]); <!-- Image och Thumb kan vara lite kluriga att spara p.g.a. att de inte är string. -->
+        if (photo != null) 
+        {<!-- Om det finns något i det publicerade bildfältet (om det inte är tomt) -->
+            newFileName = Guid.NewGuid().ToString() + "_" +
+                Path.GetFileName(photo.FileName); <!-- Gör om bilden till en string och spara det med samma filnamn som man publicerade det med-->
+            imagePath = @"Images/" + newFileName; <!-- Spara i Images foldern -->
+            photo.Save(@"~/" + imagePath);
+            <p>@imagePath</p>
+            imageThumbPath = @"Images/thumbs/" + newFileName; <!-- Samma sak men för thumb -->
+            photo.Resize(width: 200, height: 100, preserveAspectRatio: true, 
+                preventEnlarge: true); <!-- En thumb ska ju vara mindre. Så här förminskas den. -->
+            photo.Save(@"~/" + imageThumbPath);
+
+            var db = Database.Open("StarterSite"); <!-- Här är vart de ska sparas i databasen. -->
+            var insertCommand = "INSERT INTO Products (Name, Image, Thumb, Info, Category, Price, Stock, Date) VALUES(@0, @1, @2, @3, @4, @5, @6, @7)";
+            db.Execute(insertCommand, Name, imagePath, imageThumbPath, Info, Category, Price, Stock, Date);
+            Response.Redirect("~/AddProduct.cshtml"); <!-- När det är klart så blir man directad tillbaka så att fälten töms. -->
+        }
+    }
+}
+
+<h1>Thumbnail Image</h1> <!-- Ett form här för att kunna fylla i fält. -->
+<form method="post" enctype="multipart/form-data">
+    <fieldset>
+        <legend>Creating Product</legend>
+        <p><a href="~/">Return</a></p>
+
+        <p><label for="Name">Product name:</label> <!-- Här fylls namn i -->
+            <br />
+            <input type="text" name="Name" value="@Request.Form["Name"]" />
+            @Html.ValidationMessage("Name") <!-- Validationmessage är om det är giltigt som namn enligt kraven som man gjort när man skapade kolumnen -->
+        </p>
+
+
+        <label for="Image">Image:</label> <!-- Image fylls i -->
+        <br />
+        <input name="Image" type="file" value="Image" />
+
+        <p><label for="Info" >Specification:</label>
+            <br />
+            <textarea rows="5" cols="30" name="Info">@Request.Form["Info"]</textarea> <!-- Information fylls i -->
+            @Html.ValidationMessage("Info")
+        </p>
+
+        <p><label for="Category">Category:</label> <!-- Category väljs -->
+            <br />
+            <select name="Category">
+                <option value="Perfume">Perfume</option>
+                <option value="Handbags">Handbags</option>
+                <option value="Jewelry">Jewelry</option>
+                <option value="Diverse">Diverse</option>
+            </select>
+        </p>
+
+        <p><label for="Price">Price:</label> <!-- Price fylls i -->
+            <br />
+            <input name="Price" type="number" value="@Request.Form["Price"]" />
+            @Html.ValidationMessage("Price")
+        </p>
+
+        <p><label for="Stock">Amount left:</label> <!-- Antal kvar. -->
+            <br />
+            <input type="number" name="Stock" value="@Request.Form["Stock"]" />
+            @Html.ValidationMessage("Stock")
+        </p>
+
+        <input type="submit" value="Submit" /> <!-- När man trycker på knappen så sparas det. -->
+    </fieldset>
+</form>
+    
+@if (imagePath != "")
+{ <!-- Om det finns en image -->
+    <div class="result">
+        <img src="@imageThumbPath" alt="Thumbnail Image" /> <!-- Så visas thumben för den bilden och visas (för att kunna se alla produkter i databasen) -->
+        <a href="@Html.AttributeEncode(imagePath)" target="_Self">
+            View full size
+        </a>
+    </div>
+}
+    @{
+        var db2 = Database.Open("StarterSite");
+        var selectedData = db2.Query("SELECT * FROM Products");
+        var grid = new WebGrid(source: selectedData);
+    }
+    @grid.GetHtml( //Alla dessa kolumners ska finnas för varje produkt. Detta är en grid, alltså det som visar produkten.
+        columns: grid.Columns 
+        (
+        grid.Column("Name"),
+        grid.Column("Info"),
+        grid.Column("Category"),
+        grid.Column("Price"),
+        grid.Column("Stock"),
+        grid.Column(format: @<a href="~/EditProduct?ID=@item.ProductID">Edit</a>),
+        grid.Column(format: @<a href="~/DeleteProduct?ID=@item.ProductID">Delete</a>)
+        )
+    )

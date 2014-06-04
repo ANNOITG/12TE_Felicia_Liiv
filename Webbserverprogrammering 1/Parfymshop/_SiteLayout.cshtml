@@ -1,0 +1,158 @@
+﻿@{
+    var db = Database.Open("StarterSite");
+    var result = db.Query(" SELECT TOP 4 * from Products order by Date Desc");
+}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- jQuery library (served from Google) -->
+        
+
+        <meta charset="utf-8" />
+        <title>@Page.Title</title>
+        <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+        <link href="~/StyleSheet.css" rel="stylesheet" type="text/css" />
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <script src="~/Scripts/jquery-2.1.0.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.8.24.js"></script>
+        <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+        <script src="~/Scripts/Script.js"></script>
+        <!-- bxSlider CSS file -->
+        <link href="~/bxSlider/jquery.bxslider.css" rel="stylesheet" />
+        <script src="~/bxSlider/jquery.bxslider.min.js"></script>
+        <meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <header>
+
+            
+                <div class="float-right"> <!--Jag vill ha loginknapparna till höger längst upp-->
+                    <section id="login">
+                        @if (WebSecurity.IsAuthenticated) { <!-- Om användaren är inloggad... -->
+                            <div class="loggedin">
+                                Hi, <a class="email" href="~/Account/Manage" title="Manage">@WebSecurity.CurrentUserName</a>!
+                                <form id="logoutForm" action="~/Account/Logout" method="post">
+                                    @AntiForgery.GetHtml()
+                                    <a href="javascript:document.getElementById('logoutForm').submit()" id="logoutBtn">Log out</a>
+                                </form>
+                            </div>
+                        } else { <!-- ... Annars så... -->
+                            <div class="loginbuttons">
+                                @if(!WebSecurity.IsAuthenticated)
+                                {
+                                <p id="errorLog">
+                                    To be able to use your cart correctly you must be logged in.
+                                </p>
+                                }
+                                <ul>
+                                    <li><a href="~/Account/Login">Log in</a></li>
+                                    <li><a href="~/Account/Register">Register</a></li>
+                                </ul>
+                            </div>
+                        }
+                    </section>
+                </div>
+        </header>         
+        
+            
+            <div class="featured"> <!-- Om man är på default sidan så ... -->
+                <div class="cartbutton"> <!-- Cart button för att kunna komma direkt till kundkorgen -->
+                        <a href="~/Cart.cshtml"><img src="~/Cart_pic.png" id="cart"/> | Go to cart</a>
+                    </div> 
+                @if(Request.RawUrl.ToString().Trim().ToLower() == "/loginexample/" || Request.RawUrl.ToString().ToLower().Trim() == "/loginexample/default")
+                {
+                    
+                    if (Roles.IsUserInRole(WebSecurity.CurrentUserName, "Admin"))
+                    {
+                        <a href="AddProduct.cshtml" class="featured_manage">Manage products</a>
+                    }
+                    foreach (var p in result)
+                    {
+                            <div class="featured_frame"> <!-- På sidan utav Default sidan så visas de fyra nyaste produkterna. -->
+                                <div id="image">
+                                    <img src="@p.Thumb" />
+                                </div> 
+                                @*<div class="price_buy">*@
+                                <div id="price">@p.Price:-</div>
+                                <div class="buybutton">
+                                    <a onclick="link(@p.ProductID)"  href="#"><img src="~/Cart_pic.png" id="buy"/> | Buy</a>
+                                </div>
+                                @*</div>*@
+                            </div>
+                    }
+                }
+                else
+                { <!-- ... annars så -->
+                <div class="buymenu"> <!-- Om man är inne på någon annan sida utom default så kommer en kundkorg komma upp på samma sida -->
+                        <div class="cartCont">
+                            <p>
+                                <u>Cart</u>
+                            </p>
+                            @if (!WebSecurity.IsAuthenticated)
+                            { <!-- Om användaren inte är inloggad så visas ett felmeddelande eftersom kundkorgen kan strula om man inte är inloggad. -->
+                            <p class="errorMenu">
+                                You must be logged in for this menu to work properly
+                            </p>
+                            }
+                            <p id="AjaxApp"></p>
+                    </div>
+                    <div class="cartbutton_menu">
+                        <a href="~/Cart.cshtml"><img src="~/Cart_pic.png" id="buycart"/> | Go to cart</a>
+                    </div>
+                </div>
+                }
+         </div>
+                
+             <div id="body"> <!-- Innehållet kommer visas här. Delas upp i 2 delar. Features och main-->
+            <div class="main"> <!-- Meny och logo som är högst upp -->
+               <div class="logoPlacer">
+                    <a href="~/"><img id="logo" src="~/Logo.png" /></a>
+                </div>  
+                <ul class="menu">
+                    <li><a href="~/Categories/Perfumes">Perfume</a></li>
+                    <li><a href="~/Categories/Handbags">Handbags</a></li>
+                    <li><a href="~/Categories/Jewelry">Jewelry</a></li>
+                    <li><a href="~/Categories/Diverse">Diverse</a></li>
+                </ul>
+
+                
+
+            <div class="content"> 
+                @RenderBody() <!-- Här visas innehållet i varje cshtml sida. -->
+            </div>
+           </div>
+        </div>
+
+
+        
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                </div>
+            </div>
+        </footer>
+        @RenderSection("Scripts", required: false)
+
+
+        <script>
+
+            function link(id) { //Om man trycker på "buy" så kommer detta att hända (default sidan)
+
+                $.get("Cart.cshtml?ID=" +id, function (data, status) {
+                    alert("Successfully added to cart.");
+                    $("#AjaxApp").html(data);
+                });
+            }
+
+            function linkCat(id) { // -||- om man är på någon utav categoriesen.
+
+                $.get("../Cart.cshtml?ID=" + id, function (data, status) {
+                    alert("");
+                    $("#AjaxApp").html(data);
+                });
+            }
+            
+        </script>
+    </body>
+</html>

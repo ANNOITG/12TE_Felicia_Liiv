@@ -1,0 +1,115 @@
+﻿@{
+    var db = Database.Open("StarterSite"); <!-- Hämtar ut ID från databasen -->
+    var prod = db.QuerySingle(" SELECT * FROM Products WHERE ProductID = " + Request["ID"]);
+    
+    WebImage photo = null; 
+    var newFileName = "";
+    var imagePath = "";
+    var imageThumbPath = "";
+    var Name = "";
+    var Info = "";
+    var Price = "";
+    var Stock = "";
+    var Category = "";
+    
+    Validation.RequireField("Name", "Name is required"); <!-- Allting måste vara ifyllt -->
+    Validation.RequireField("Price", "Price is required");
+    Validation.RequireField("Stock" , "You didn't tell us how many are left.");
+    Validation.RequireField("Category", "What category is it?");
+    Validation.RequireField("Info", "You need information for the product.");
+    Validation.Add("Price", Validator.Integer("Must be an integer"));
+    Validation.Add("Stock", Validator.Integer("Must be an integer"));
+    
+    
+    if(IsPost && Validation.IsValid()) 
+    { <!-- Om allting är valid och postat -->
+        photo = WebImage.GetImageFromRequest(Request.Form["Image"]); <!-- Hämtar ut bilden ifrån IDt -->
+        if(photo != null) 
+        { <!-- Om det finns en bild så tas den bort och den nya läggs till. -->
+            var fullPathThumb = Server.MapPath(prod.Thumb);
+            var fullPathImage = Server.MapPath(prod.Image);
+            
+            if(File.Exists(fullPathImage))
+            {
+                File.Delete(fullPathImage);
+            }
+            
+            if(File.Exists(fullPathThumb))
+            {
+                File.Delete(fullPathThumb);
+            }
+
+            newFileName = Guid.NewGuid().ToString() + "_" +
+                Path.GetFileName(photo.FileName);
+
+            imagePath = @"Images/" + newFileName; <!-- vart det ska sparas -->
+            photo.Save(@"~/" + imagePath);
+
+            imageThumbPath = @"Images/thumbs/" + newFileName; 
+            photo.Resize(width: 200, height: 100, preserveAspectRatio: true,
+                preventEnlarge: true);
+            photo.Save(@"~/" + imageThumbPath);
+        }
+        else
+        {  <!-- Om det inte är valid/post, ha kvar samma bild/thumb. -->
+            imagePath = prod.Image; 
+            imageThumbPath = prod.Thumb;
+        }
+
+        Name = Request.Form["Name"];
+        Info = Request.Form["Info"];
+        Price = Request.Form["Price"];
+        Stock = Request.Form["Stock"];
+
+        var updateCommand = "UPDATE Products SET Name=@0, Image=@1, Thumb=@2, Info=@3, Category=@4, Price=@5, Stock=@6 WHERE ProductID = " + Request["ID"];
+        db.Execute(updateCommand, Name, imagePath, imageThumbPath, Info, Category, Price, Stock);
+        Response.Redirect("~/AddProduct.cshtml"); <!-- Vart ändringarna ska läggas och redirecta tillbaka till add product -->
+       
+    }
+}
+<form method="post" enctype="multipart/form-data"> <!-- Här visas formet upp så man kan ändra. -->
+    <fieldset>
+        <legend>Edit Product</legend>
+
+        <p>
+            <label for="Name">Product name:</label>
+            <input type="text" name="Name" value="@(IsPost ? Request.Form["Name"] : prod.Name)" /> <!-- Värdet ska hämtas ifrån addproduct och sen kunna ändras -->
+            @Html.ValidationMessage("Name")
+        </p>
+
+        <p>
+            <label for="Image">Image</label>
+            <input name="Image" type="file" value="@(IsPost ? Request.Form["Image"] : prod.Image)" />
+        </p>
+
+        <p>
+            <label for="Category">Category:</label>
+            <select name="Category">
+                <option value="Perfume" selected="@((IsPost ? Request.Form["Category"] : prod.Category) == "Perfume" ? "selected" : "")">Perfume</option>
+                <option value="Handbags" selected="@((IsPost ? Request.Form["Category"] : prod.Category) == "Handbags" ? "selected" : "")">Handbags</option>
+                <option value="Jewelry" selected ="@((IsPost ? Request.Form["Category"] : prod.Category) == "Jewelry" ? "selected" : "")">Jewelry</option>
+                <option value="Diverse" selected="@((IsPost ? Request.Form["Category"] : prod.Category) == "Diverse" ? "selected" : "")">Diverse</option>
+            </select>
+        </p>
+
+        <p>
+            <label for="Info">New information:</label>
+            <textarea name="Info">@(IsPost ? Request.Form["Info"] : prod.Info)</textarea>
+            @Html.ValidationMessage("Info")
+        </p>
+
+        <p>
+            <label for="Price">New Price:</label>
+            <input type="text" name="Price" value="@(IsPost ? Request.Form["Price"] : prod.Price)" />
+            @Html.ValidationMessage("Price")
+        </p>
+
+        <p>
+            <label for="Stock">Amount left:</label>
+            <input name="Stock" type="number" value="@(IsPost ? Request.Form["Stock"] : prod.Stock)" />
+            @Html.ValidationMessage("Stock")
+        </p>
+
+        <input type="submit" value="Submit" />
+    </fieldset>
+</form>

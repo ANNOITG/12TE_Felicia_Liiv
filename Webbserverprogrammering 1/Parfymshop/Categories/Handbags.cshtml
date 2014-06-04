@@ -1,0 +1,20 @@
+﻿@{
+    var db = Database.Open("StarterSite");
+    var prod = db.Query(" SELECT * FROM Products WHERE Category = 'Handbags'");
+    Layout = "~/_SiteLayout.cshtml";
+}
+
+@foreach (var row in prod) 
+{ <!-- Såhär visas alla saker i en viss kategori. I detta fall Handbags. -->
+
+        <div class="product_frame">
+            <a href="~/ProductShow.cshtml?ID=@row.ProductID">
+                <div id="image"><img src="@Href("~/" + row.Thumb)"/></div> 
+                <div id="price">@row.Price:-</div>
+            </a>
+            <div class="buybutton">
+                <a href="~/Cart.cshtml?ID=@row.ProductID"><img src="~/Cart_pic.png" id="buy"/> | Buy</a>
+            </div>
+        </div>
+
+}

@@ -1,0 +1,43 @@
+﻿@{
+        var productCount = 0; <!-- För att visa hur många man har tryckt på och vill ha -->
+        var theKey = WebSecurity.CurrentUserId.ToString(); <!-- Saken man tryck "buy" på kommer vara theKey. -->
+        IList<int> Cart = (List<int>)WebCache.Get(theKey);
+        Layout = "~/_SiteLayout.cshtml";
+    if(Request != null) 
+    { <!-- Om det man tryck på har ett värde -->
+        if(Cart == null)
+        { <!--  Om listan är tom-->
+            Cart = new List<int>(); <!-- Så görs en ny lista -->
+            Cart.Add(Request["ID"].AsInt()); <!-- Och så läggs det man tryck på till -->
+        
+            WebCache.Set(theKey, Cart);
+            productCount++; <!-- Antalet ökar med 1 -->
+        }
+        else
+        {
+            Cart.Add(Request["ID"].AsInt()); <!-- Samma sak händer här, bara att en ny lista inte skapas -->
+            productCount++;
+        }
+    }
+        var db = Database.Open("StarterSite"); 
+        var queryString = "Select * from Products where ";
+        for (int i = 0; i < Cart.Count; i++) 
+        { <!-- Detta görs för att man ska hämta ut alla ID:n på en gång och inte behöver fråga databasen fler än en gång efter produkterna . -->
+            queryString += "ProductID = " + Cart[i];
+        
+            if((i+1) != Cart.Count)
+            {
+                queryString += " or ";
+            } 
+        }
+        var products = db.Query(queryString);
+    
+        foreach(var product in products) 
+        {    <!-- Såhär redovisas produkten i kundkorgen -->
+            <div>
+            <p><a href="~/DeleteFromCart.cshtml?ID=@product.ProductID" id="deleteFromCart">x</a> @product.Name | @product.Price </p>
+            </div>
+            <p>@productCount</p>
+            <a href="~/Default.cshtml">Return to front page</a>
+        }
+}
